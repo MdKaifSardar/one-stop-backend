@@ -13,7 +13,7 @@ router.get('/test',requireSignIn, isAdmin, testController);
 
 router.post('/forgot-password', forgotPassController);
 
-router.post('/get-user-details', requireSignIn, getUserDetails);
+router.get('/get-user-details', requireSignIn, getUserDetails);
 
 router.get('/user-auth',requireSignIn, (req, res) => {
     res.status(200).json({ok: true});

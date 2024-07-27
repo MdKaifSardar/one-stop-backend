@@ -13,7 +13,7 @@
     }
   ],
   "functions": {
-    "/api/v1/product/routes/productRoute.js": {
+    "/SERVER/index.js": {
       "maxDuration": 30
     }
   }

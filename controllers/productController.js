@@ -65,8 +65,8 @@ export const getAllProduct = async (req, res) => {
     const products = await productModel
       .find({})
       .select("-photo")
-      // .limit(12)
-      // .sort({ createdAt: -1 });
+      .limit(12)
+      .sort({ createdAt: -1 });
 
     const totalProducts = await productModel.countDocuments();
     return res.status(200).json({

@@ -13,7 +13,7 @@
     }
   ],
   "functions": {
-    "/SERVER/index.js": {
+    "api/index.js": {
       "maxDuration": 30
     }
   }

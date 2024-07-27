@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
-const JWT_SECRET_WORD = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET_WORD;
 
 export const registerController = async (req, res) => {
   try {
@@ -73,7 +73,7 @@ export const registerController = async (req, res) => {
         id: user.id,
       },
     };
-    const authToken = jwt.sign(data, JWT_SECRET_WORD);
+    const authToken = jwt.sign(data, JWT_SECRET);
 
     res.status(200).json({
       success: true,
@@ -101,10 +101,10 @@ export const registerController = async (req, res) => {
 
 export const loginController = async (req, res) => {
   try {
-    if (!JWT_SECRET_WORD) {
+    if (!JWT_SECRET) {
       return res.status(404).json({
         success: false,
-        message: "sectretword now found",
+        message: "sectret word now found",
       })
     }
     const { email, password } = req.body;
@@ -116,7 +116,6 @@ export const loginController = async (req, res) => {
         message: "Invalid email or password",
       });
     }
-    console.log(JWT_SECRET_WORD);
     // Checking if account already exists:
     const user = await userModel.findOne({ email });
     if (!user) {
@@ -141,7 +140,7 @@ export const loginController = async (req, res) => {
     };
 
     // getting the auth token
-    const authToken = jwt.sign(data, JWT_SECRET_WORD);
+    const authToken = jwt.sign(data, JWT_SECRET);
 
     res.status(200).json({
       success: true,

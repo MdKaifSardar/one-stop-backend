@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+const JWT_SECRET_WORD = process.env.JWT_SECRET
+
 export const registerController = async (req, res) => {
   try {
     const { name, email, password, phone, address, answer } = req.body;
@@ -54,7 +56,7 @@ export const registerController = async (req, res) => {
           id: user.id
       }
     }
-    const authToken = jwt.sign(data, process.env.JWT_SECRET);
+    const authToken = jwt.sign(data, JWT_SECRET_WORD);
 
     res.status(200).json({
       success: true,

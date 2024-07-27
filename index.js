@@ -23,7 +23,7 @@ app.use('/api/v1/auth',authRoutes)
 app.use('/api/v1/category',categoryRoute);
 app.use('/api/v1/product',productRoute);
 
-mongoose.connect(process.env.MONGO_URL)
+await mongoose.connect(process.env.MONGO_URL)
 .then(() => {
     console.log('The db is Connected!');
     app.listen(PORT, () => {

@@ -5,6 +5,7 @@ import authRoutes from './routes/authRoute.js'
 import categoryRoute from './routes/categoryRoute.js'
 import productRoute from './routes/productRoute.js'
 import dotenv from 'dotenv';
+import serverless from 'serverless-http';
 
 dotenv.config();
 const app = express();
@@ -24,6 +25,9 @@ app.use('/api/v1/auth',authRoutes)
 app.use('/api/v1/category',categoryRoute);
 app.use('/api/v1/product',productRoute);
 
-app.listen(PORT, ()=>{
-    console.log(`Server hehe running on port ${PORT}`);
-})
+const handler = serverless(app);
+
+// Export the handler function
+export const apiHandler = async (req, res) => {
+    return handler(req, res);
+};

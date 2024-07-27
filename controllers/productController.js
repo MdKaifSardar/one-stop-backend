@@ -65,8 +65,8 @@ export const getAllProduct = async (req, res) => {
     const products = await productModel
       .find({})
       .select("-photo")
-      .limit(12)
-      .sort({ createdAt: -1 });
+      // .limit(12)
+      // .sort({ createdAt: -1 });
 
     const totalProducts = await productModel.countDocuments();
     return res.status(200).json({
@@ -89,13 +89,10 @@ export const getAllProduct = async (req, res) => {
 // <---------------------------------------><-------------------------------->
 export const getSIngleProduct = async (req, res) => {
   try {
-    // const product = await productModel
-    //   .findOne({ slug: req.params.proSlug })
-    //   .select("-photo")
-    //   .populate("category");
-    const product = {
-      name: "hehe"
-    } 
+    const product = await productModel
+      .findOne({ slug: req.params.proSlug })
+      .select("-photo")
+      .populate("category");
     if (!product) {
       return res.status(404).json({
         success: false,

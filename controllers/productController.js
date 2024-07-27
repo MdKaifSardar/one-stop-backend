@@ -78,7 +78,7 @@ export const getAllProduct = async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-      error: error,
+      error,
       success: false,
       message: "Something went wrong while gettin gthe product",
     });

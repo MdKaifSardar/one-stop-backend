@@ -6,6 +6,36 @@ dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET_WORD;
 
+export const getUserDetails = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    if(!userId){
+      return res.status(404).json({
+        message: "user not found",
+        success: false,
+      })
+    }
+    const user = await userModel.findById(userId).select("-password -answer");
+    if(!user){
+      return res.status(404).json({
+        message: "User not found",
+        success: false
+      })
+    }
+    res.status(200).json({
+      message: "user found succesfully",
+      success: true,
+      user: user,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Something wrong happened",
+      success: false,
+    });
+  }
+};
+
 export const registerController = async (req, res) => {
   try {
     const { name, email, password, phone, address, answer } = req.body;
@@ -105,7 +135,7 @@ export const loginController = async (req, res) => {
       return res.status(404).json({
         success: false,
         message: "sectret word now found",
-      })
+      });
     }
     const { email, password } = req.body;
 

@@ -1,17 +1,19 @@
 import express from 'express'
-import {registerController, loginController, testController, forgotPassController} from '../controllers/authController.js'
+import {registerController, loginController, testController, forgotPassController, getUserDetails} from '../controllers/authController.js'
 import { isAdmin, requireSignIn } from '../middlewares/authMiddelware.js';
 import Formidable from 'express-formidable';
 
 const router = express.Router();
 
-router.post('/register',registerController);
+router.post('/register', registerController);
 
 router.post('/login',loginController);
 
 router.get('/test',requireSignIn, isAdmin, testController);
 
 router.post('/forgot-password', forgotPassController);
+
+router.post('/get-user-details', requireSignIn, getUserDetails);
 
 router.get('/user-auth',requireSignIn, (req, res) => {
     res.status(200).json({ok: true});

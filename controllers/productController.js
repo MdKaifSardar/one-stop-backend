@@ -89,11 +89,13 @@ export const getAllProduct = async (req, res) => {
 // <---------------------------------------><-------------------------------->
 export const getSIngleProduct = async (req, res) => {
   try {
-    const product = await productModel
-      .findOne({ slug: req.params.proSlug })
-      .select("-photo")
-      .populate("category");
-
+    // const product = await productModel
+    //   .findOne({ slug: req.params.proSlug })
+    //   .select("-photo")
+    //   .populate("category");
+    const product = {
+      name: "hehe"
+    } 
     if (!product) {
       return res.status(404).json({
         success: false,

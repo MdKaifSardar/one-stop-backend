@@ -28,6 +28,6 @@ app.get('/',(req,res)=>{
     res.send("<h1>Welcom to the ecommerce app</h1>")
 })
 
-app.listen(PORT,()=>{
-    console.log(`Server running on ${process.env.DEV_MODE} mode on port ${PORT}`)
+app.listen(8080,()=>{
+    console.log(`Server running on ${process.env.DEV_MODE} mode on port 8080`)
 })

@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 import userModel from "../models/userModel.js";
-// import dotenv from 'dotenv';
-// dotenv.config();
-// const JWT_SECRET = process.env.JWT_SECRET_WORD;
+import dotenv from 'dotenv';
+dotenv.config();
+const JWT_SECRET = process.env.JWT_SECRET_WORD;
 
 
 //jwt verification:
@@ -12,7 +12,7 @@ export const requireSignIn = (req, res, next) => {
     res.status(401).send({error: "Please authenticate using a valid token"});
   }
   try {
-    const data = jwt.verify(token, process.env.JWT_SECRET);
+    const data = jwt.verify(token, JWT_SECRET);
     req.user = data.user;
     next();
   } catch (error) {

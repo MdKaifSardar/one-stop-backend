@@ -7,8 +7,10 @@ const connectDB = async () => {
       connectTimeoutMS: 30000,
     });
     console.log("Database connected");
+    return true;
   } catch (error) {
     console.error("Database connection error:", error);
+    return false;
   }
 };
 

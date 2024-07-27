@@ -13,8 +13,8 @@
     }
   ],
   "functions": {
-    "index.js": {
-      "maxDuration": 20
+    "/api/v1/product/routes/productRoute.js": {
+      "maxDuration": 30
     }
   }
 }

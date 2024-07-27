@@ -1,33 +1,44 @@
 import { comparePassword, hashPassword } from "../helpers/authHelper.js";
 import userModel from "../models/userModel.js";
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
-
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 dotenv.config();
 
-const JWT_SECRET_WORD = process.env.JWT_SECRET
+const JWT_SECRET_WORD = process.env.JWT_SECRET;
 
 export const registerController = async (req, res) => {
   try {
     const { name, email, password, phone, address, answer } = req.body;
 
     if (!name) {
-      return res.status(400).json({ success:false, message: "Name is required" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Name is required" });
     }
     if (!email) {
-      return res.status(400).json({ success:false, message: "Email is required" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Email is required" });
     }
     if (!password) {
-      return res.status(400).json({ success:false, message: "Password is required" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Password is required" });
     }
     if (!phone) {
-      return res.status(400).json({ success:false, message: "Phone Number is required" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Phone Number is required" });
     }
     if (!address) {
-      return res.status(400).json({ success:false, message: "Address is required" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Address is required" });
     }
     if (!answer) {
-      return res.status(400).json({ success:false, message: "Secret answer is required" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Secret answer is required" });
     }
 
     //existing user
@@ -51,11 +62,17 @@ export const registerController = async (req, res) => {
       password: hashedPassword,
     }).save();
 
+    if (!user) {
+      return res.status(404).json({
+        message: "user not found",
+        success: false,
+      });
+    }
     const data = {
       user: {
-          id: user.id
-      }
-    }
+        id: user.id,
+      },
+    };
     const authToken = jwt.sign(data, JWT_SECRET_WORD);
 
     res.status(200).json({
@@ -70,7 +87,7 @@ export const registerController = async (req, res) => {
         date: user.date,
         role: user.role,
       },
-      authToken: authToken
+      authToken: authToken,
     });
   } catch (error) {
     console.log(error);
@@ -81,8 +98,6 @@ export const registerController = async (req, res) => {
     });
   }
 };
-
-
 
 export const loginController = async (req, res) => {
   try {
@@ -108,17 +123,19 @@ export const loginController = async (req, res) => {
     //checking if password matches or not
     const match = await comparePassword(password, user.password);
     if (!match) {
-      return res.status(400).json({success: false, message: "Wrong Password"});
+      return res
+        .status(400)
+        .json({ success: false, message: "Wrong Password" });
     }
 
     const data = {
       user: {
-          id: user.id
-      }
-    }
+        id: user.id,
+      },
+    };
 
     // getting the auth token
-    const authToken = jwt.sign(data, process.env.JWT_SECRET);
+    const authToken = jwt.sign(data, JWT_SECRET_WORD);
 
     res.status(200).json({
       success: true,
@@ -132,7 +149,7 @@ export const loginController = async (req, res) => {
         date: user.date,
         role: user.role,
       },
-      authToken: authToken
+      authToken: authToken,
     });
   } catch (error) {
     console.log(error);
@@ -144,23 +161,28 @@ export const loginController = async (req, res) => {
   }
 };
 
-
 export const forgotPassController = async (req, res) => {
   try {
-    const {email, answer, password} = req.body;
+    const { email, answer, password } = req.body;
     if (!email) {
-      return res.status(400).json({ success:false, message: "Email is required" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Email is required" });
     }
     if (!answer) {
-      return res.status(400).json({ success:false, message: "Secret answer is required" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Secret answer is required" });
     }
     if (!password) {
-      return res.status(400).json({ success:false, message: "Password is required" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Password is required" });
     }
 
-    const user = await userModel.findOne({email, answer})
+    const user = await userModel.findOne({ email, answer });
     const hashed = await hashPassword(password);
-    await userModel.findByIdAndUpdate(user._id, {password: hashed});
+    await userModel.findByIdAndUpdate(user._id, { password: hashed });
     res.status(200).json({
       success: true,
       message: "updated password successfully",
@@ -168,25 +190,24 @@ export const forgotPassController = async (req, res) => {
         name: user.name,
         email: user.email,
         date: user.date,
-      }
-    })
-    if(!user){
+      },
+    });
+    if (!user) {
       return res.status(404).json({
         success: false,
         message: "User Not Found",
-      })
+      });
     }
-  } catch (error) { 
+  } catch (error) {
     console.log(error);
     res.status(500).json({
-      message: 'something went wrong',
+      message: "something went wrong",
       error: error,
-      success: false
-    })
+      success: false,
+    });
   }
-}
+};
 
-
-export const testController=(req,res)=>{
-  res.send('Protected Route');
-}
+export const testController = (req, res) => {
+  res.send("Protected Route");
+};

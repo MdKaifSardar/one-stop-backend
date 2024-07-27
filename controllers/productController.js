@@ -69,7 +69,7 @@ export const getAllProduct = async (req, res) => {
       .sort({ createdAt: -1 });
 
     const totalProducts = await productModel.countDocuments();
-    return res.status(200).json({
+    res.status(200).json({
       products: products,
       success: true,
       message: "Here are all the products",
@@ -77,7 +77,7 @@ export const getAllProduct = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({
+    res.status(500).json({
       error,
       success: false,
       message: "Something went wrong while gettin gthe product",

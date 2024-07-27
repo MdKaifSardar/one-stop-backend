@@ -5,12 +5,11 @@ import categoryRoute from './routes/categoryRoute.js'
 import productRoute from './routes/productRoute.js'
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-// import connectDB from './Config/db.js';
-
 
 dotenv.config();
 const app = express();
 const PORT= process.env.PORT || 8080;
+const DB_URL= process.env.MONGO_URL;
 
 app.get('/',(req,res)=>{
     res.send("hello there hhe")
@@ -24,7 +23,7 @@ app.use('/api/v1/auth',authRoutes)
 app.use('/api/v1/category',categoryRoute);
 app.use('/api/v1/product',productRoute);
 
-mongoose.connect(`mongodb+srv://mkaifsard564773:dKbqbBQDZ6QXjuvY@pdfdb.9eent9l.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=PDFDB`)
+mongoose.connect(DB_URL)
 .then(() => {
     console.log('The db is Connected!');
     app.listen(PORT, () => {

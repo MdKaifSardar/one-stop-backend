@@ -6,6 +6,10 @@ dotenv.config();
 
 const JWT_SECRET_WORD = process.env.JWT_SECRET;
 
+if (!JWT_SECRET_WORD) {
+  throw new Error('JWT_SECRET is not defined in environment variables');
+}
+
 export const registerController = async (req, res) => {
   try {
     const { name, email, password, phone, address, answer } = req.body;

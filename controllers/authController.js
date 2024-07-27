@@ -6,10 +6,6 @@ dotenv.config();
 
 const JWT_SECRET_WORD = process.env.JWT_SECRET;
 
-if (!JWT_SECRET_WORD) {
-  throw new Error('JWT_SECRET is not defined in environment variables');
-}
-
 export const registerController = async (req, res) => {
   try {
     const { name, email, password, phone, address, answer } = req.body;
@@ -105,6 +101,12 @@ export const registerController = async (req, res) => {
 
 export const loginController = async (req, res) => {
   try {
+    if (!JWT_SECRET_WORD) {
+      return res.status(404).json({
+        success: false,
+        message: "sectretword now found",
+      })
+    }
     const { email, password } = req.body;
 
     //checking if email / pass is empty.
@@ -114,7 +116,7 @@ export const loginController = async (req, res) => {
         message: "Invalid email or password",
       });
     }
-
+    console.log(JWT_SECRET_WORD);
     // Checking if account already exists:
     const user = await userModel.findOne({ email });
     if (!user) {

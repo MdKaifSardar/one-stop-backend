@@ -1,6 +1,6 @@
 import express from 'express'
 import { isAdmin, requireSignIn } from '../middlewares/authMiddelware.js';
-import { createProduct, deleteProduct, filterProduct, findProductsByCat, getAllProduct, getSIngleProduct, productPhoto, searchProduct, showProductByPages, similarProducts, updateProduct } from '../controllers/productController.js';
+import { addComment, createProduct, deleteProduct, filterProduct, findProductsByCat, getAllProduct, getSIngleProduct, productPhoto, searchProduct, showProductByPages, similarProducts, updateProduct } from '../controllers/productController.js';
 import Formidable from 'express-formidable';
 
 const router = express.Router();
@@ -26,5 +26,7 @@ router.post('/search-product/:keyword', searchProduct);
 router.get('/similar-products/:pId/:cId', similarProducts);
 
 router.post('/category-products/:slug', findProductsByCat);
+
+router.post('/comments/:id', addComment);
 
 export default router;

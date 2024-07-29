@@ -396,3 +396,43 @@ export const findProductsByCat = async (req, res) => {
     })
   }
 }
+
+export const addComment = async (req, res) => {
+  const { id } = req.params;
+  const { comment, user } = req.body;
+  if(!user){
+    return res.status(404).json({
+      message: "user Id notound",
+      success: false,
+    })
+  }
+  if(!comment){
+    return res.status(404).json({
+      message: "comment not found",
+      success: false,
+    })
+  }
+
+  try {
+    const product = await productModel.findById(id).select("-photo");
+    if (!product) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Product not found." });
+    }
+
+    product.comments.push({ user, comment });
+    await product.save();
+
+    res
+      .status(200)
+      .json({
+        success: true,
+        product: product,
+        message: "succesfully added the comment",
+      });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+

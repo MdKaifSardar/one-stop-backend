@@ -19,7 +19,7 @@ router.delete('/delete-product/:proId', deleteProduct);
 
 router.post('/products-by-page', showProductByPages);
 
-router.post('/search-product/:keyword', searchProduct);
+router.post('/search-product/:keyword?', searchProduct);
 
 router.get('/similar-products/:pId/:cId', similarProducts);
 

@@ -43,12 +43,12 @@ export const createCategory = async (req, res) => {
 // <------------------------------------------------><---------------------->
 export const updateCategory = async (req, res) => {
   const { catId } = req.params;
-  const { name, slug } = req.fields;
+  const { name } = req.fields;
 
   try {
     const updatedCategory = await categoryModel.findByIdAndUpdate(
       catId,
-      { name, slug },
+      { name, slug: slugify(name) },
       { new: true }
     );
 

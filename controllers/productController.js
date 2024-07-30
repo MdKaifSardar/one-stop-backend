@@ -278,23 +278,11 @@ export const searchProduct = async (req, res) => {
   try {
     let totalProducts = 0;
     const { price, cat } = req.body;
-    if(!price || !cat){
-      return res.status(404).json({
-        message:"price or category not found",
-        success: false
-      })
-    }
     const { keyword } = req.params;
-    if(!keyword){
-      return res.status(404).json({
-        message: "Something went wrong",
-        success: false
-      })
-    }
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
 
-    const allProducts = await productModel.find({
+    const query = ({
       $and: [
         {
           $or: [
@@ -305,29 +293,18 @@ export const searchProduct = async (req, res) => {
         {
           price: { $gte: price[0], $lte: price[1] },
         },
-        {
-          category: cat,
-        },
       ],
     });
+    if (cat) {
+      query.$and.push({
+        category: cat,
+      });
+    }
+
+    const allProducts = await productModel.find(query);
     totalProducts = allProducts.length;
     const result = await productModel
-      .find({
-        $and: [
-          {
-            $or: [
-              { name: { $regex: keyword, $options: "i" } },
-              { description: { $regex: keyword, $options: "i" } },
-            ],
-          },
-          {
-            price: { $gte: price[0], $lte: price[1] },
-          },
-          {
-            category: cat,
-          },
-        ],
-      })
+      .find(query)
       .select("-photo")
       .skip((page - 1) * limit)
       .limit(limit);

@@ -1,6 +1,7 @@
 import slugify from "slugify";
 import productModel from "../models/productModel.js";
 import fs from "fs";
+import userModel from "../models/userModel.js";
 
 // ROUTE: 1 - create product <---------------------------------------------------->
 // <----------------------------------------------------><------------------------>
@@ -414,6 +415,17 @@ export const addComment = async (req, res) => {
   }
 
   try {
+    const userNew = await userModel.findById(user);
+
+    if(!userNew){
+      return res.status(404).json({
+        message: "user not found",
+        success: false
+      })
+    }
+
+    const name = userNew.name;
+
     const product = await productModel.findById(id).select("-photo");
     if (!product) {
       return res
@@ -421,7 +433,7 @@ export const addComment = async (req, res) => {
         .json({ success: false, message: "Product not found." });
     }
 
-    product.comments.push({ user, comment });
+    product.comments.push({ user, comment, name });
     await product.save();
 
     res

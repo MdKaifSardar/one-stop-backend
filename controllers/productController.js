@@ -279,20 +279,11 @@ export const searchProduct = async (req, res) => {
     let totalProducts = 0;
     const { price, cat } = req.body;
     const { keyword } = req.params;
-    if(!keyword){
-      return;
-    }
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
 
     const query = ({
       $and: [
-        {
-          $or: [
-            { name: { $regex: keyword?keyword:null, $options: "i" } },
-            { description: { $regex: keyword?keyword:null, $options: "i" } },
-          ],
-        },
         {
           price: { $gte: price[0], $lte: price[1] },
         },
@@ -301,6 +292,14 @@ export const searchProduct = async (req, res) => {
     if (cat) {
       query.$and.push({
         category: cat,
+      });
+    }
+    if (keyword) {
+      query.$and.push({
+        $or: [
+          { name: { $regex: keyword, $options: "i" } },
+          { description: { $regex: keyword, $options: "i" } },
+        ],
       });
     }
 

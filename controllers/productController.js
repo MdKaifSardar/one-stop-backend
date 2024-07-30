@@ -277,8 +277,20 @@ export const showProductByPages = async (req, res) => {
 export const searchProduct = async (req, res) => {
   try {
     let totalProducts = 0;
-    const { price } = req.body;
+    const { price, cat } = req.body;
+    if(!price || !cat){
+      return res.status(404).json({
+        message:"price or category not found",
+        success: false
+      })
+    }
     const { keyword } = req.params;
+    if(!keyword){
+      return res.status(404).json({
+        message: "Something went wrong",
+        success: false
+      })
+    }
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
 
@@ -292,6 +304,9 @@ export const searchProduct = async (req, res) => {
         },
         {
           price: { $gte: price[0], $lte: price[1] },
+        },
+        {
+          category: cat,
         },
       ],
     });
@@ -307,6 +322,9 @@ export const searchProduct = async (req, res) => {
           },
           {
             price: { $gte: price[0], $lte: price[1] },
+          },
+          {
+            category: cat,
           },
         ],
       })

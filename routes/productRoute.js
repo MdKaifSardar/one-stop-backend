@@ -17,7 +17,7 @@ router.get('/product-photo/:proId', productPhoto);
 
 router.delete('/delete-product/:proId', deleteProduct);
 
-router.get('/products-by-page', showProductByPages);
+router.post('/products-by-page', showProductByPages);
 
 router.post('/search-product/:keyword', searchProduct);
 

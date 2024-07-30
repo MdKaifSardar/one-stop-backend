@@ -279,6 +279,9 @@ export const searchProduct = async (req, res) => {
     let totalProducts = 0;
     const { price, cat } = req.body;
     const { keyword } = req.params;
+    if(!keyword){
+      return;
+    }
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
 
@@ -286,8 +289,8 @@ export const searchProduct = async (req, res) => {
       $and: [
         {
           $or: [
-            { name: { $regex: keyword, $options: "i" } },
-            { description: { $regex: keyword, $options: "i" } },
+            { name: { $regex: keyword?keyword:null, $options: "i" } },
+            { description: { $regex: keyword?keyword:null, $options: "i" } },
           ],
         },
         {

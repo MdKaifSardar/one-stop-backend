@@ -236,46 +236,25 @@ export const updateProduct = async (req, res) => {
   }
 };
 
-//filter product:
-
-export const filterProduct = async (req, res) => {
+// product by pages:
+export const showProductByPages = async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
     let args = {};
     const { cat, price } = req.body;
-    if (cat.length > 0) {
-      args.category = cat;
+    if (cat && cat.length > 0) {
+      args.category = { $in: cat };
     }
     if (price.length) {
       args.price = { $gte: price[0], $lte: price[1] };
     }
-    const products = await productModel.find(args);
-
-    res.status(200).json({
-      success: true,
-      message: "products filtered succesfully",
-      products: products,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      success: false,
-      message: "Something went wrong while filtering products",
-    });
-  }
-};
-
-// product by pages:
-export const showProductByPages = async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 10;
-
-  try {
     const products = await productModel
-      .find()
+      .find(args)
       .select("-photo")
       .skip((page - 1) * limit)
       .limit(limit);
-    const totalProducts = await productModel.countDocuments();
+    const totalProducts = await productModel.countDocuments(args);
 
     res.status(200).json({
       success: true,
@@ -293,6 +272,7 @@ export const showProductByPages = async (req, res) => {
     });
   }
 };
+
 
 export const searchProduct = async (req, res) => {
   try {

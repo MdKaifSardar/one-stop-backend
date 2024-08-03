@@ -121,7 +121,6 @@ export const singleCategory = async (req, res) => {
 // <------------------------------------------------><---------------------->
 export const deleteCategory = async (req, res) => {
   const { catId } = req.params;
-
   if (!catId) {
     return res.status(401).json({
       message: "No category found",

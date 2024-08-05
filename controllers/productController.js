@@ -322,7 +322,7 @@ export const searchProduct = async (req, res) => {
     console.log(error);
     res.status(500).json({
       success: false,
-      message: "Something wrong happened while searching",
+      message: error.message,
     });
   }
 };

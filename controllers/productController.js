@@ -273,7 +273,6 @@ export const showProductByPages = async (req, res) => {
   }
 };
 
-
 export const searchProduct = async (req, res) => {
   try {
     let totalProducts = 0;
@@ -283,19 +282,20 @@ export const searchProduct = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
 
-    const query = ({
+    const query = {
       $and: [
         {
           price: { $gte: price[0], $lte: price[1] },
         },
       ],
-    });
+    };
     if (cat) {
       query.$and.push({
         category: cat,
       });
     }
     if (keyword) {
+      console.log("hehe");
       query.$and.push({
         $or: [
           { name: { $regex: keyword, $options: "i" } },
@@ -332,7 +332,7 @@ export const similarProducts = async (req, res) => {
   try {
     const { cId, pId } = req.params;
 
-    console.log(cId, pId)
+    console.log(cId, pId);
     const products = await productModel
       .find({
         category: cId,
@@ -357,49 +357,53 @@ export const similarProducts = async (req, res) => {
 
 export const findProductsByCat = async (req, res) => {
   try {
-    const {page, limit} = req.body;
-    const {slug} = req.params
+    const { page, limit } = req.body;
+    const { slug } = req.params;
 
-    const products = await productModel.find({category: slug}).select("-photo").skip((page - 1)*limit).limit(limit);
+    const products = await productModel
+      .find({ category: slug })
+      .select("-photo")
+      .skip((page - 1) * limit)
+      .limit(limit);
 
     res.status(200).json({
       success: true,
       message: "succesfully fetched the products by category",
-      products: products
-    })
+      products: products,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
       success: false,
-      message: "Somethin wrong happened while filtering"
-    })
+      message: "Somethin wrong happened while filtering",
+    });
   }
-}
+};
 
 export const addComment = async (req, res) => {
   const { id } = req.params;
   const { comment, user } = req.body;
-  if(!user){
+  if (!user) {
     return res.status(404).json({
       message: "user Id notound",
       success: false,
-    })
+    });
   }
-  if(!comment){
+  if (!comment) {
     return res.status(404).json({
       message: "comment not found",
       success: false,
-    })
+    });
   }
 
   try {
     const userNew = await userModel.findById(user);
 
-    if(!userNew){
+    if (!userNew) {
       return res.status(404).json({
         message: "user not found",
-        success: false
-      })
+        success: false,
+      });
     }
 
     const name = userNew.name;
@@ -414,15 +418,12 @@ export const addComment = async (req, res) => {
     product.comments.push({ user, comment, name });
     await product.save();
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        product: product,
-        message: "succesfully added the comment",
-      });
+    res.status(200).json({
+      success: true,
+      product: product,
+      message: "succesfully added the comment",
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 };
-

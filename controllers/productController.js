@@ -278,7 +278,7 @@ export const searchProduct = async (req, res) => {
   try {
     let totalProducts = 0;
     const { price, cat } = req.body;
-    const { keyword } = req.params;
+    const { keyword } = req.params || "";
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
 
